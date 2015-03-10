@@ -28,9 +28,6 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.result_text)
     TextView textView;
 
-    @InjectView(R.id.progress_bar)
-    ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,36 +46,6 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.request_btn)
     void onRequestBtnClicked() {
-        showProgressBar();
-        requestManager.requestString(new RequestManager.ICallback() {
-            @Override
-            public void onResult(String result) {
-                hideProgressBar();
-                textView.setText(result);
-            }
-        });
-    }
-
-    private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                progressBar.getViewTreeObserver().removeOnPreDrawListener(this);
-                progressBar.setScaleX(0);
-                progressBar.setScaleY(0);
-                progressBar.animate().scaleX(1).scaleY(1).start();
-                return true;
-            }
-        });
-    }
-
-    private void hideProgressBar() {
-        progressBar.animate().scaleX(0).scaleY(0).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-            }
-        }).start();
+        textView.setText(requestManager.requestString());
     }
 }
